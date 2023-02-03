@@ -82,16 +82,19 @@ elif [[ $DNS == 4 ]]; then
 	sudo nmcli con up $active_device >/dev/null 2>&1
 elif [[ $DNS == 5 ]]; then
 	sudo nmcli connection modify $NETNAME ipv4.dns "178.22.122.100 185.51.200.2"
+	sudo nmcli connection modify $NETNAME ipv6.method disabled
 	sudo nmcli networking off
 	sudo nmcli networking on
 	sudo nmcli con up $active_device >/dev/null 2>&1
 elif [[ $DNS == 6 ]]; then
 	sudo nmcli connection modify $NETNAME ipv4.dns "185.55.226.26 185.55.225.25"
+	sudo nmcli connection modify $NETNAME ipv6.method disabled
 	sudo nmcli networking off
 	sudo nmcli networking on
 	sudo nmcli con up $active_device >/dev/null 2>&1
 elif [[ $DNS == 7 ]]; then
 	sudo nmcli connection modify $NETNAME ipv4.dns "78.157.42.100 78.157.42.101"
+	sudo nmcli connection modify $NETNAME ipv6.method disabled
 	sudo nmcli networking off
 	sudo nmcli networking on
 	sudo nmcli con up $active_device >/dev/null 2>&1
