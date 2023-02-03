@@ -1,41 +1,6 @@
 #!/bin/bash
 #
 
-<<<<<<< HEAD
-# --check return command output error fun ---#
-check_command() {
-	command
-	if [ $? -eq 0 ]; then
-		return 0
-	else
-		return 1
-	fi
-}
-
-#---------------------------------------------#
-
-#------ grep active network interface --------#
-active_device=$(nmcli -t -f device connection show --active)
-
-#------ grep active network connection type --#
-connection_type=$(nmcli -t -f type connection show --active)
-
-#--- Checking the presence of an active interface connection ---#
-check_command sudo nmcli con up $active_device >/dev/null 2>&1
-if [ $? -eq 0 ]; then
-	# --- Deleting the active connection ---#
-	nmcli connection delete type $connection_type con-name $active_device >/dev/null 2>&1
-	# ---- Creating a new connection with an active interface ---#
-	sudo nmcli connection add type $connection_type con-name $active_device >/dev/null 2>&1
-	# --- New connection activation ---#
-	sudo nmcli con up $active_device >/dev/null 2>&1
-else
-	# ---- Activate the existing connection, if any --#
-	sudo nmcli con up $active_device >/dev/null 2>&1
-fi
-
-=======
->>>>>>> H-cyber-main
 cat <<EOF
  --==[ ===================================== ]==--
  --==[ Auto DNS changer by Pakrohk! V0.1     ]==--
