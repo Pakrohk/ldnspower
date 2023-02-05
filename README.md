@@ -1,6 +1,6 @@
 # DnsChanger
 
-This script was written to answer the need to collect all kinds of DNS servers in Linux.
+This script was written to answer the need to collect all kinds of DNS servers in Linux.\
 Hope it will be useful.
 
 ## how to use
