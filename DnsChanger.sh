@@ -10,13 +10,14 @@ cat <<EOF
 
  Which choice you wanna make?
  =================================================
-     1. Changing DNS to Google's DNS.           
+     1. Changing DNS to Google's DNS.
      2. Changing DNS to OpenDNS's DNS.
      3. Cangeing Dns to CloudFlare's DNS.
-     4. Changing DNS to Comodo's DNS.           
+     4. Changing DNS to Comodo's DNS.
      5. Changing DNS to Shecan's DNS.
      6. Changing DNS to Begzar's DNS.
-     7. Changing DNS to ElTeam's Gameing DNS
+     7. Changing DNS to ElTeam's Gaming DNS
+     8. Changing DNS to QUAD9's Gaming DNS
  =================================================
 EOF
 
@@ -45,18 +46,18 @@ connection_type=$(sudo nmcli -t -f type connection show --active)
 if ! check_command sudo nmcli con up "$active_device" >/dev/null 2>&1; then
 
 	# --- Deleting the active connection ---#
-	
+
 	sudo nmcli connection delete type "$connection_type" con-name "$active_device" >/dev/null 2>&1
 
 	# ---- Creating a new connection with an active interface ---#
-	
+
 	sudo nmcli connection add type "$connection_type" con-name "$active_device" >/dev/null 2>&1
 	# --- New connection activation ---#
-	
+
 	sudo nmcli con up "$active_device" >/dev/null 2>&1
 else
 	# ---- Activate the existing connection, if any --#
-	
+
 	sudo nmcli con up "$active_device" >/dev/null 2>&1
 fi
 
@@ -100,6 +101,12 @@ elif [[ $DNS == 6 ]]; then
 	sudo nmcli con up "$active_device" >/dev/null 2>&1
 elif [[ $DNS == 7 ]]; then
 	sudo nmcli connection modify "$NETNAME" ipv4.dns "78.157.42.100 78.157.42.101"
+	sudo nmcli connection modify "$NETNAME" ipv6.method disabled
+	sudo nmcli networking off
+	sudo nmcli networking on
+	sudo nmcli con up "$active_device" >/dev/null 2>&1
+elif [[ $DNS == 8 ]]; then
+	sudo nmcli connection modify "$NETNAME" ipv4.dns " 9.9.9.9 149.112.112.112"
 	sudo nmcli connection modify "$NETNAME" ipv6.method disabled
 	sudo nmcli networking off
 	sudo nmcli networking on
