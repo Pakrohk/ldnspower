@@ -17,7 +17,7 @@ cat <<EOF
      5. Changing DNS to Shecan's DNS.
      6. Changing DNS to Begzar's DNS.
      7. Changing DNS to ElTeam's Gameing DNS
-	 8. Changing DNS to 403's DNS.
+     8. Changing DNS to 403's DNS.
  =================================================
 EOF
 
