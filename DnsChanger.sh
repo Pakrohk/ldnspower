@@ -17,6 +17,7 @@ cat <<EOF
      5. Changing DNS to Shecan's DNS.
      6. Changing DNS to Begzar's DNS.
      7. Changing DNS to ElTeam's Gameing DNS
+	 8. Changing DNS to 403's DNS.
  =================================================
 EOF
 
@@ -100,6 +101,12 @@ elif [[ $DNS == 6 ]]; then
 	sudo nmcli con up "$active_device" >/dev/null 2>&1
 elif [[ $DNS == 7 ]]; then
 	sudo nmcli connection modify "$NETNAME" ipv4.dns "78.157.42.100 78.157.42.101"
+	sudo nmcli connection modify "$NETNAME" ipv6.method disabled
+	sudo nmcli networking off
+	sudo nmcli networking on
+	sudo nmcli con up "$active_device" >/dev/null 2>&1
+elif [[ $DNS == 8 ]]; then
+	sudo nmcli connection modify "$NETNAME" ipv4.dns "10.202.10.202 10.202.10.102"
 	sudo nmcli connection modify "$NETNAME" ipv6.method disabled
 	sudo nmcli networking off
 	sudo nmcli networking on
