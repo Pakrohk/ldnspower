@@ -1,0 +1,5 @@
+# requirements.txt
+typer==0.9.0
+rich==13.7.0
+dnspython==2.6.0
+polycli==0.1.3
