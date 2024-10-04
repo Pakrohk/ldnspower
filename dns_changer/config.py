@@ -1,45 +1,53 @@
-# dns_changer/config.py
+import os
+import tomli
+from pathlib import Path
+from typing import Dict, Any
 
-DNS_SERVERS = {
-    "Google": {
-        "ipv4": ["8.8.8.8", "8.8.4.4"],
-        "ipv6": ["2001:4860:4860::8888", "2001:4860:4860::8844"],
-        "rank": 5
-    },
-    "OpenDNS": {
-        "ipv4": ["208.67.222.222", "208.67.220.220"],
-        "ipv6": ["2620:119:35::35", "2620:119:53::53"],
-        "rank": 4
-    },
-    "Cloudflare": {
-        "ipv4": ["1.1.1.1", "1.0.0.1"],
-        "ipv6": ["2606:4700:4700::1111", "2606:4700:4700::1001"],
-        "rank": 5
-    },
-    "Comodo": {
-        "ipv4": ["8.26.56.26", "8.20.247.20"],
-        "ipv6": ["::FFFF:081A:381A", "::FFFF:0814:F714"],
-        "rank": 3
-    },
-    "Shecan": {
-        "ipv4": ["178.22.122.100", "185.51.200.2"],
-        "ipv6": [],
-        "rank": 3
-    },
-    "Begzar": {
-        "ipv4": ["185.55.226.26", "185.55.225.25"],
-        "ipv6": [],
-        "rank": 2
-    },
-    "ElTeam Gaming": {
-        "ipv4": ["78.157.42.100", "78.157.42.101"],
-        "ipv6": [],
-        "rank": 2
-    },
-    "403": {
-        "ipv4": ["10.202.10.202", "10.202.10.102"],
-        "ipv6": [],
-        "rank": 1
-    }
-}
+# Default paths for configuration
+DEFAULT_CONFIG_PATH = Path(__file__).parent / "default_dns_servers.toml"
+USER_CONFIG_DIR = Path.home() / ".config" / "dns_changer"
+USER_CONFIG_PATH = USER_CONFIG_DIR / "dns_servers.toml"
 
+class Config:
+    def __init__(self):
+        self.config_path = self._get_config_path()
+        self.dns_servers = self._load_config()
+
+    def _get_config_path(self) -> Path:
+        """
+        Determine which configuration file to use.
+        Prioritizes user config, falls back to default if not found.
+        """
+        if os.environ.get("DNS_CHANGER_CONFIG"):
+            return Path(os.environ["DNS_CHANGER_CONFIG"])
+        
+        if USER_CONFIG_PATH.exists():
+            return USER_CONFIG_PATH
+        
+        # If user config doesn't exist, create it from default
+        if not USER_CONFIG_DIR.exists():
+            USER_CONFIG_DIR.mkdir(parents=True)
+        
+        if not USER_CONFIG_PATH.exists():
+            DEFAULT_CONFIG_PATH.read_bytes()
+            USER_CONFIG_PATH.write_bytes(DEFAULT_CONFIG_PATH.read_bytes())
+        
+        return USER_CONFIG_PATH
+
+    def _load_config(self) -> Dict[str, Any]:
+        """Load and parse the TOML configuration file."""
+        try:
+            with open(self.config_path, "rb") as f:
+                config_data = tomli.load(f)
+                return config_data.get("servers", {})
+        except Exception as e:
+            print(f"Error loading configuration: {e}")
+            return {}
+
+    def get_dns_servers(self) -> Dict[str, Dict[str, Any]]:
+        """Return the loaded DNS servers configuration."""
+        return self.dns_servers
+
+# Create a global config instance
+config = Config()
+DNS_SERVERS = config.get_dns_servers()
